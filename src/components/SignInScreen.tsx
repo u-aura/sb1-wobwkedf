@@ -1,127 +1,90 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
+// SignInScreen.tsx
+import React, { useState } from 'react';
+import { Mail, Eye, EyeOff } from 'lucide-react';
 
-export default function LoginScreen() {
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* Logo Section */}
-      <View style={styles.logoContainer}>
-        <Text style={styles.logo}>α</Text>
-      </View>
-
-      {/* Welcome Text */}
-      <Text style={styles.welcome}>Welcome. Sign in to your account.</Text>
-
-      {/* Input Fields */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Phone or Email"
-          style={styles.input}
-          placeholderTextColor="#888"
-        />
-        <TextInput
-          placeholder="Password or OTP"
-          style={styles.input}
-          secureTextEntry
-          placeholderTextColor="#888"
-        />
-      </View>
-
-      {/* Sign In Button */}
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
-
-      {/* Sign Up Link */}
-      <Text style={styles.signUp}>
-        Don't have an account? <Text style={styles.signUpLink}>Sign up</Text>
-      </Text>
-
-      {/* Bottom Links */}
-      <View style={styles.bottomLinks}>
-        <Text style={styles.bottomLink}>Privacy</Text>
-        <Text style={styles.bottomLink}>Terms</Text>
-        <Text style={styles.bottomLink}>Policy</Text>
-      </View>
-    </SafeAreaView>
-  );
+interface SignInScreenProps {
+  onSignIn: () => void;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 24,
-    justifyContent: 'center',
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  logo: {
-    fontSize: 120,
-    fontWeight: 'bold',
-    color: '#007BFF', // Same vivid blue as your logo
-  },
-  welcome: {
-    textAlign: 'center',
-    fontSize: 18,
-    marginBottom: 24,
-    color: '#222222',
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-  input: {
-    height: 48,
-    borderColor: '#CCC',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 12,
-    paddingHorizontal: 12,
-    fontSize: 16,
-    color: '#000',
-  },
-  button: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 14,
-    borderRadius: 8,
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  signUp: {
-    textAlign: 'center',
-    fontSize: 15,
-    marginBottom: 16,
-    color: '#555',
-  },
-  signUpLink: {
-    color: '#007BFF',
-    fontWeight: '600',
-  },
-  bottomLinks: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 40,
-    marginTop: 'auto',
-    marginBottom: 20,
-  },
-  bottomLink: {
-    fontSize: 13,
-    color: '#666',
-  },
-});
+const SignInScreen: React.FC<SignInScreenProps> = ({ onSignIn }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [phoneEmail, setPhoneEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSignIn();
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center px-6">
+      <div className="text-6xl font-light text-blue-500 mb-6">α</div>
+
+      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md space-y-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-semibold text-gray-800 mb-2">Welcome</h1>
+          <p className="text-gray-600">Sign in to your account</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Phone or Email"
+            value={phoneEmail}
+            onChange={(e) => setPhoneEmail(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password or OTP"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">or</span>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <button className="w-full flex items-center justify-center space-x-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <Mail size={20} />
+            <span>Continue with Email</span>
+          </button>
+        </div>
+
+        <div className="text-center text-sm text-gray-600">
+          Don’t have an account?{' '}
+          <button className="text-blue-500 font-semibold hover:underline">
+            Sign up
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default SignInScreen;
